@@ -1,5 +1,6 @@
 from pygame import Vector2, Surface
 from src.base.game_object import GameObject
+
 class RenderableObject(GameObject):
     """
     Abstract base class for game objects that are meant
@@ -18,24 +19,22 @@ class RenderableObject(GameObject):
                  visible: bool = True) -> None:
         """
         Initialises renderable object.
-        Set sprite, position and visibility.
+        Sets sprite, position and visibility.
         """
         super.__init__(position)
         self.sprite = sprite
         self.visible = visible
-
-    def get_position(self) -> Vector2:
-        """Returns the current poisiton of the object"""
-        return self.position
 
     def is_visible(self) -> bool:
         """Checks if the object is visible"""
         return self.visible
     
     def make_visible(self) -> None:
+        """Makes the object visible"""
         self.visible = True
     
     def make_invisible(self) -> None:
+        """Makes the object invisible"""
         self.invisible = False
 
     def render(self, display: "Surface") -> None:
