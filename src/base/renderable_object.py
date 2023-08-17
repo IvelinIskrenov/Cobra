@@ -1,5 +1,5 @@
 from pygame import Vector2, Surface
-from src.base.game_object import GameObject
+from base.game_object import GameObject
 
 class RenderableObject(GameObject):
     """
@@ -21,7 +21,7 @@ class RenderableObject(GameObject):
         Initialises renderable object.
         Sets sprite, position and visibility.
         """
-        super.__init__(position)
+        super().__init__(position)
         self.sprite = sprite
         self.visible = visible
 
