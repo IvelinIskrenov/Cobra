@@ -9,7 +9,7 @@ class GameObject():
     """
 
     def __init__(self, 
-                 position: "Vector2" = Vector2(0, 0)) -> None:
+                 position: Vector2 = Vector2(0, 0)) -> None:
         """
         Initialises the game object.
         Sets sposition.

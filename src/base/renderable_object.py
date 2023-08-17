@@ -13,9 +13,9 @@ class RenderableObject(GameObject):
     visible - bool
     """
 
-    def __init__(self, 
-                 sprite: "Surface",
-                 position: "Vector2" = Vector2(0, 0),
+    def __init__(self,
+                 sprite: Surface,
+                 position: Vector2 = Vector2(0, 0),
                  visible: bool = True) -> None:
         """
         Initialises renderable object.
