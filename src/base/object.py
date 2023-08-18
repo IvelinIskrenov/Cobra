@@ -1,6 +1,6 @@
 from pygame import Vector2
 
-class GameObject():
+class Object():
     """
     Abstract base class for all game objects that are positionable.
 
@@ -14,7 +14,7 @@ class GameObject():
         Initialises the game object.
         Sets sposition.
         """
-        self.position = position
+        self.position: Vector2 = position
 
     def get_position(self) -> Vector2:
         """Returns the current poisiton of the object"""

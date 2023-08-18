@@ -1,7 +1,7 @@
 from pygame import Vector2, Surface
-from src.base.game_object import GameObject
+from base.object import Object
 
-class RenderableObject(GameObject):
+class RenderableObject(Object):
     """
     Abstract base class for game objects that are meant
     to be rendered on the user's screen.
@@ -22,8 +22,8 @@ class RenderableObject(GameObject):
         Sets sprite, position and visibility.
         """
         super().__init__(position)
-        self.sprite = sprite
-        self.visible = visible
+        self.sprite: Surface = sprite
+        self.visible: bool = visible
 
     def is_visible(self) -> bool:
         """Checks if the object is visible"""

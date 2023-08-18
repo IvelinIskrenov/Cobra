@@ -27,14 +27,14 @@ class Tile(RenderableObject):
         visibility;
     c   oordinates: x and y - relative to other tiles.
         """
-        self.x = coordinate_x
-        self.y = coordinate_y
+        self.x: int = coordinate_x
+        self.y: int = coordinate_y
         tile_position_x = self.x*SQUARE_WIDTH
         tile_position_y = self.y*SQUARE_HEIGHT
         tile_position = Vector2(tile_position_x, tile_position_y)
         super().__init__(sprite, tile_position, True)
         self.sprite = transform.scale(self.sprite, (SQUARE_WIDTH, SQUARE_HEIGHT))
 
-    def is_snake_blockade(self) -> bool:
+    def is_snake_obstruction(self) -> bool:
         """Tells if the object is a blockade for the snake or not"""
         pass
