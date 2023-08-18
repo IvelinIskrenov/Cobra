@@ -1,8 +1,8 @@
-import unittest
+from unittest import TestCase
 from src.base.tile import Tile, SQUARE_HEIGHT, SQUARE_WIDTH
 
 
-class TestingTile(unittest.TestCase):
+class TestingTile(TestCase):
 
     def test_tile_initialisation(self):
         tile1 = Tile(0, 0)

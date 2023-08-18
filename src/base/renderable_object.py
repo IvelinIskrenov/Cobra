@@ -6,11 +6,11 @@ class RenderableObject(GameObject):
     Abstract base class for game objects that are meant
     to be rendered on the user's screen.
 
-    parameteres:
-    sprite - pygame.Surface - sprite that is going to be rendered on
-    the given display
-    position - pygame.Vector2
-    visible - bool
+    Parameters:
+    sprite - pygame.Surface - sprite that is going to be rendered on;
+    the given display;
+    position - pygame.Vector2;
+    visible - bool.
     """
 
     def __init__(self,

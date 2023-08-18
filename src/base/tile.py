@@ -7,6 +7,12 @@ class Tile(RenderableObject):
     """
     Abstract class that presents the game tiles.
     Tiles have defined height and width, and are coordinate oriented.
+
+    Parameters: 
+    position;
+    sprite;
+    visibility;
+    coordinates: x and y - relative to other tiles.
     """
     def __init__(self,
                  coordinate_x: int = 0,
@@ -14,11 +20,12 @@ class Tile(RenderableObject):
                  sprite: Surface = Surface((1,1))) -> None:
         """
         Initialises the game tile object.
-        An abstract class that defines the game logic.
-        Sets: position,
-        sprite - (scales with width and height of the tile),
-        visibility,
-        coordinates: x and y - relative to other tiles
+
+        Sets:
+        position - relative to the screen;
+        sprite - (scales with width and height of the tile);
+        visibility;
+    c   oordinates: x and y - relative to other tiles.
         """
         self.x = coordinate_x
         self.y = coordinate_y
@@ -28,5 +35,6 @@ class Tile(RenderableObject):
         super().__init__(sprite, tile_position, True)
         self.sprite = transform.scale(self.sprite, (SQUARE_WIDTH, SQUARE_HEIGHT))
 
-    def is_blockade():
+    def is_snake_blockade(self) -> bool:
+        """Tells if the object is a blockade for the snake or not"""
         pass

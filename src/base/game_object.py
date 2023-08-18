@@ -4,8 +4,8 @@ class GameObject():
     """
     Abstract base class for all game objects that are positionable.
 
-    parameteres:
-    position - pygame.Vector2
+    Parameteres:
+    position - pygame.Vector2.
     """
 
     def __init__(self, 
