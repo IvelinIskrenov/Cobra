@@ -1,5 +1,5 @@
 from pygame import Vector2, Surface
-from base.game_object import GameObject
+from src.base.game_object import GameObject
 
 class RenderableObject(GameObject):
     """

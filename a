@@ -1,0 +1,95 @@
+[1mdiff --git a/src/Test.py b/src/Test.py[m
+[1mindex 7741e7e..9a6d57f 100644[m
+[1m--- a/src/Test.py[m
+[1m+++ b/src/Test.py[m
+[36m@@ -1,5 +1,8 @@[m
+ import unittest[m
+[31m-from tests.square_test import *[m
+[32m+[m[32mimport sys[m
+[32m+[m[32mimport os[m
+[32m+[m[32msys.path.append(os.getcwd())[m
+[32m+[m[32mfrom src.tests.tile_test import *[m
+ [m
+ if __name__ == '__main__':[m
+     unittest.main()[m
+\ No newline at end of file[m
+[1mdiff --git a/src/__init__.py b/src/__init__.py[m
+[1mdeleted file mode 100644[m
+[1mindex e69de29..0000000[m
+[1mdiff --git a/src/base/renderable_object.py b/src/base/renderable_object.py[m
+[1mindex ec5db7c..4afa3a1 100644[m
+[1m--- a/src/base/renderable_object.py[m
+[1m+++ b/src/base/renderable_object.py[m
+[36m@@ -1,5 +1,5 @@[m
+ from pygame import Vector2, Surface[m
+[31m-from base.game_object import GameObject[m
+[32m+[m[32mfrom src.base.game_object import GameObject[m
+ [m
+ class RenderableObject(GameObject):[m
+     """[m
+[1mdiff --git a/src/base/square.py b/src/base/square.py[m
+[1mdeleted file mode 100644[m
+[1mindex 2fd55de..0000000[m
+[1m--- a/src/base/square.py[m
+[1m+++ /dev/null[m
+[36m@@ -1,29 +0,0 @@[m
+[31m-from pygame import Vector2, Surface, transform[m
+[31m-from base.renderable_object import RenderableObject[m
+[31m-[m
+[31m-SQUARE_WIDTH = 64[m
+[31m-SQUARE_HEIGHT = 64[m
+[31m-class Square(RenderableObject):[m
+[31m-    """[m
+[31m-    Abstract class that presents the game squares.[m
+[31m-    Squares have defined height and width, and are coordinate oriented.[m
+[31m-    """[m
+[31m-    def __init__(self,[m
+[31m-                 coordinate_x: int = 0,[m
+[31m-                 coordinate_y: int = 0,[m
+[31m-                 sprite: Surface = Surface((1,1))) -> None:[m
+[31m-        """[m
+[31m-        Initialises the game square object.[m
+[31m-        An abstract class that defines the game logic.[m
+[31m-        Sets: position,[m
+[31m-        sprite - (scales with width and height of the square),[m
+[31m-        visibility,[m
+[31m-        coordinates: x and y - relative to other squares[m
+[31m-        """[m
+[31m-        self.x = coordinate_x[m
+[31m-        self.y = coordinate_y[m
+[31m-        square_position_x = self.x*SQUARE_WIDTH[m
+[31m-        square_position_y = self.y*SQUARE_HEIGHT[m
+[31m-        square_position = Vector2(square_position_x, square_position_y)[m
+[31m-        super().__init__(sprite, square_position, True)[m
+[31m-        self.sprite = transform.scale(self.sprite, (SQUARE_WIDTH, SQUARE_HEIGHT))[m
+[1mdiff --git a/src/tests/square_test.py b/src/tests/square_test.py[m
+[1mdeleted file mode 100644[m
+[1mindex ec1b6ff..0000000[m
+[1m--- a/src/tests/square_test.py[m
+[1m+++ /dev/null[m
+[36m@@ -1,24 +0,0 @@[m
+[31m-import unittest[m
+[31m-from base.square import Square, SQUARE_HEIGHT, SQUARE_WIDTH[m
+[31m-[m
+[31m-[m
+[31m-class TestingSquare(unittest.TestCase):[m
+[31m-[m
+[31m-    def test_square_initialisation(self):[m
+[31m-        square1 = Square(0, 0)[m
+[31m-[m
+[31m-        self.assertEqual(square1.x, 0)[m
+[31m-        self.assertEqual(square1.y, 0)[m
+[31m-        self.assertEqual(square1.position.x, 0)[m
+[31m-        self.assertEqual(square1.position.y, 0)[m
+[31m-[m
+[31m-    def test_square_relativity_to_other_squares(self):[m
+[31m-        square1 = Square(0, 0)[m
+[31m-        square2 = Square(1, 1)[m
+[31m-        square3 = Square(2, 2)[m
+[31m-        [m
+[31m-        self.assertEqual(square1.position.x + SQUARE_WIDTH, square2.position.x)[m
+[31m-        self.assertEqual(square1.position.y + SQUARE_HEIGHT, square2.position.y)[m
+[31m-[m
+[31m-        self.assertEqual(square1.position.x + 2*SQUARE_WIDTH, square3.position.x)[m
+[31m-        self.assertEqual(square1.position.y + 2*SQUARE_HEIGHT, square3.position.y)[m
+\ No newline at end of file[m
