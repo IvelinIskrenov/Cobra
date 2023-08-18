@@ -38,3 +38,14 @@ class Tile(RenderableObject):
     def is_snake_obstruction(self) -> bool:
         """Tells if the object is a blockade for the snake or not"""
         pass
+
+    def set_coordinates(self,
+                        coordinate_x: int,
+                        coordinate_y: int,
+                        offset_x: int = 0,
+                        offset_y: int = 0) -> None:
+        self.x: int = coordinate_x
+        self.y: int = coordinate_y
+        tile_position_x = self.x*SQUARE_WIDTH + offset_x
+        tile_position_y = self.y*SQUARE_HEIGHT + offset_y
+        self.position = Vector2(tile_position_x, tile_position_y)

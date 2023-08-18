@@ -15,7 +15,7 @@ class Map(Object):
     def __init__(self,
                  rows: int = 10,
                  columns: int = 10,
-                 position: Vector2 = (0,0)) -> None:
+                 position: Vector2 = Vector2(0,0)) -> None:
         """
         Initialises the map with tiles with sizes rows and columns.
 
@@ -27,7 +27,21 @@ class Map(Object):
         super().__init__(position)
         self.rows: int = rows
         self.columns: int = columns
-        self.tiles: list[list[Tile]] = [[Tile()]*columns for i in range(rows)]
+        self.tiles: list[list[Tile]] = [[Tile() for j in range(columns)] for i in range(rows)]
+        self.set_tile_render_positions()
+
+    def set_tile_render_positions(self) -> None:
+        for i in range(self.rows):
+            for j in range(self.columns):
+                self.set_tile_position(i, j)
+
+    def change_tile(self, i: int, j: int, new_tile: Tile) -> None:
+        self[i][j] = new_tile
+        self.set_tile_position(i, j)
+
+    def set_tile_position(self, i: int, j: int) -> None:
+        #since we give x coordinate first, we have to swap row and column (i and j)
+        self[i][j].set_coordinates(j, i, self.position.x, self.position.y)
 
     def __getitem__(self, key) -> list[Tile]:
         """Override to [], for easier access."""
