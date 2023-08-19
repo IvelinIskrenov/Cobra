@@ -8,7 +8,7 @@ class Object():
     position - pygame.Vector2.
     """
 
-    def __init__(self, 
+    def __init__(self,
                  position: Vector2 = Vector2(0, 0)) -> None:
         """
         Initialises the game object.

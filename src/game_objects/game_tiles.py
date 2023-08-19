@@ -25,11 +25,11 @@ class Grass(Tile):
         visibility.
         """
         super().__init__(coordinate_x, coordinate_y)
-    
+
     def is_snake_obstruction(self) -> bool:
-        """Tells if the object is a blockade for the snake or not"""
+        """Returns if the object is a blockade for the snake or not"""
         return False
-    
+
 
 class Wall(Tile):
     """
@@ -54,7 +54,7 @@ class Wall(Tile):
         visibility.
         """
         super().__init__(coordinate_x, coordinate_y)
-    
+
     def is_snake_obstruction(self) -> bool:
-        """Tells if the object is a blockade for the snake or not"""
+        """Returns if the object is a blockade for the snake or not"""
         return True

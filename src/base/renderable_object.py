@@ -28,11 +28,11 @@ class RenderableObject(Object):
     def is_visible(self) -> bool:
         """Checks if the object is visible"""
         return self.visible
-    
+
     def make_visible(self) -> None:
         """Makes the object visible"""
         self.visible = True
-    
+
     def make_invisible(self) -> None:
         """Makes the object invisible"""
         self.invisible = False

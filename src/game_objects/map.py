@@ -22,30 +22,41 @@ class Map(Object):
         Sets:
         position;
         rows;
-        coulmns.
+        columns;
+        array of arrays of tiles;
+        positions of tiles.
         """
         super().__init__(position)
         self.rows: int = rows
         self.columns: int = columns
-        self.tiles: list[list[Tile]] = [[Tile() for j in range(columns)] for i in range(rows)]
+        self.tiles: list[list[Tile]] = [[Tile() for _ in range(columns)] for _ in range(rows)]
         self.set_tile_render_positions()
 
+    def __getitem__(self, key) -> list[Tile]:
+        """Override to [], for easier access."""
+        return self.tiles[key]
+
     def set_tile_render_positions(self) -> None:
+        """
+        Sets all the tiles' positions relative to their coordinates
+        on the map and the position of the map.
+        """
         for i in range(self.rows):
             for j in range(self.columns):
                 self.set_tile_position(i, j)
 
     def change_tile(self, i: int, j: int, new_tile: Tile) -> None:
+        """Places on the tile with coordinates i and j the given tile."""
         self[i][j] = new_tile
         self.set_tile_position(i, j)
 
     def set_tile_position(self, i: int, j: int) -> None:
+        """
+        Sets the tile position to it's coordinates on the map
+        and also offsets it relative to the maps position.
+        """
         #since we give x coordinate first, we have to swap row and column (i and j)
         self[i][j].set_coordinates(j, i, self.position.x, self.position.y)
-
-    def __getitem__(self, key) -> list[Tile]:
-        """Override to [], for easier access."""
-        return self.tiles[key]
 
     def _DFS_check( self,
                     i: int,
@@ -88,7 +99,7 @@ class Map(Object):
                     or self[i_new][j_new].is_snake_obstruction()):
                     return "valid"
         return "not_SCC"
-    
+
     def check_map_valid(self) -> str:
         """
         Checks if the map is valid.
@@ -116,4 +127,3 @@ class Map(Object):
         if SCC_count > 1:
             return "multiple_SCC"
         return "valid"
-

@@ -16,7 +16,7 @@ class TestingTile(TestCase):
         tile1 = Tile(0, 0)
         tile2 = Tile(1, 1)
         tile3 = Tile(2, 2)
-        
+
         self.assertEqual(tile1.position.x + SQUARE_WIDTH, tile2.position.x)
         self.assertEqual(tile1.position.y + SQUARE_HEIGHT, tile2.position.y)
 
