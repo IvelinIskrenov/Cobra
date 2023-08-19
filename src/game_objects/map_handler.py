@@ -60,4 +60,73 @@ class MapHandler():
 
         return self.create_map_from_string_lines(map_lines)
 
+    def create_map_from_string_lines(self,  map_lines: list[str]) -> bool:
+        """
+        Creates map from the given lines of string.
+        Returns false if the map is impossible to create
+        and true otherwise.
+        """
+        if len(map_lines) == 0:
+            return False
 
+        self.map = Map(len(map_lines), len(map_lines[0]))
+        for i, line in enumerate(map_lines):
+            if len(line) != len(map_lines[0]):
+                return False
+            for j, el in enumerate(line):
+                if not self._set_str_to_tile(i, j, el):
+                    return False
+
+        if self.map.check_map_valid != "valid":
+            return False
+        return True
+
+
+    def _set_str_to_tile(self, i: int, j: int, element: str) -> bool:
+        """
+        Changes the i-th and j-th tile to the given str:
+        'W' for wall;
+        'G' for grass;
+        Returns false if the str is invalid. True otherwise."""
+        if element == "W":
+            self.map.change_tile(i, j, Wall())
+        elif element == "G":
+            self.map.change_tile(i, j, Grass())
+        else:
+            return False
+        return True
+
+    def save_map(self) -> bool:
+        """
+        Saves the map in a file with the current map name in src/maps
+        """
+        current_path = getcwd()
+        save_file_path = path.join(current_path, "src", "maps", self.name + ".txt")
+        self._write_map_on_file(save_file_path)
+
+
+    def _write_map_on_file(self, file_name: str) -> None:
+        """
+        Writes information about the map on the given file path.
+        """
+        file = open(file_name, "w")
+        result = self._convert_map_into_string
+        file.write("result")
+
+    def _convert_map_into_string(self) -> str:
+        """Converts the map into a string"""
+        result = ""
+        for i in range(self.map.rows):
+            for j in range(self.map.columns):
+                result += self._get_tile_representation(i, j)
+            result += "\n"
+        return result
+
+    def _get_tile_representation(self, i: int, j: int) -> str:
+        """
+        Returns the string representation of the tile.
+        """
+        if self.map[i][j] is Wall:
+            return "W"
+        if self.map[i][j] is Grass:
+            return "G"
