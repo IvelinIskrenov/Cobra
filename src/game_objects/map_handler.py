@@ -1,6 +1,9 @@
 from os import path, getcwd
 from src.game_objects.map import Map
 from src.game_objects.game_tiles import Grass, Wall
+
+SAVE_PATH = path.join(getcwd(), "src", "maps")
+
 class MapHandler():
     """
     Map Handler class for the map.
@@ -25,18 +28,18 @@ class MapHandler():
         Returns true when a map was sucessfuly created and false otherwise
         """
         if file_path == "":
-            self.create_default_map(10, 10)
-            return True
+            return self.create_default_map(10, 10)
 
         elif path.exists(file_path) and path.isfile(file_path):
             return self._read_map_from_file(file_path)
 
         return False
 
-    def create_default_map(self, rows: int, columns: int) -> None:
+    def create_default_map(self, rows: int, columns: int) -> bool:
         """
         Changes the map into the default layot of only walls on
         the outer edge of the map and only grass in.
+        Returns true if map is successfully created, false otherwise.
         """
         self.map = Map(rows, columns)
         for i in range(rows):
@@ -45,6 +48,9 @@ class MapHandler():
                     self.map.change_tile(i, j, Wall())
                 else:
                     self.map.change_tile(i, j, Grass())
+
+        result = self.map.check_map_valid() == "valid"
+        return result
 
     def _read_map_from_file(self, file_path: str) -> bool:
         """
@@ -57,10 +63,11 @@ class MapHandler():
         while len(map_lines) > 1\
               and map_lines[len(map_lines)-1] == "":
             map_lines.pop()
+        file.close()
 
-        return self.create_map_from_string_lines(map_lines)
+        return self.convert_strings_to_map(map_lines)
 
-    def create_map_from_string_lines(self,  map_lines: list[str]) -> bool:
+    def convert_strings_to_map(self,  map_lines: list[str]) -> bool:
         """
         Creates map from the given lines of string.
         Returns false if the map is impossible to create
@@ -69,7 +76,12 @@ class MapHandler():
         if len(map_lines) == 0:
             return False
 
+        for line in map_lines:
+            if line[-1] == "\n":
+                line[:-1] #remove new line
+
         self.map = Map(len(map_lines), len(map_lines[0]))
+
         for i, line in enumerate(map_lines):
             if len(line) != len(map_lines[0]):
                 return False
@@ -99,10 +111,14 @@ class MapHandler():
     def save_map(self) -> bool:
         """
         Saves the map in a file with the current map name in src/maps
+        if the map is valid. Returns true if successfull,
+        false otherwise.
         """
-        current_path = getcwd()
-        save_file_path = path.join(current_path, "src", "maps", self.name + ".txt")
+        save_file_path = path.join(SAVE_PATH, self.name + ".txt")
+        if self.map.check_map_valid() != "valid":
+            return False
         self._write_map_on_file(save_file_path)
+        return True
 
 
     def _write_map_on_file(self, file_name: str) -> None:
@@ -110,23 +126,25 @@ class MapHandler():
         Writes information about the map on the given file path.
         """
         file = open(file_name, "w")
-        result = self._convert_map_into_string
-        file.write("result")
+        result = self.convert_map_into_strings()
+        for line in result:
+            file.write(line)
+            file.write("\n")
+        file.close()
 
-    def _convert_map_into_string(self) -> str:
+    def convert_map_into_strings(self) -> list[str]:
         """Converts the map into a string"""
-        result = ""
+        result = []
         for i in range(self.map.rows):
+            line = ""
             for j in range(self.map.columns):
-                result += self._get_tile_representation(i, j)
-            result += "\n"
+                line += self._get_tile_representation(i, j)
+            result.append(line)
         return result
 
     def _get_tile_representation(self, i: int, j: int) -> str:
         """
         Returns the string representation of the tile.
         """
-        if self.map[i][j] is Wall:
-            return "W"
-        if self.map[i][j] is Grass:
-            return "G"
+        return self.map[i][j].tile_to_str()
+        return "?"

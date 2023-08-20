@@ -30,6 +30,9 @@ class Grass(Tile):
         """Returns if the object is a blockade for the snake or not"""
         return False
 
+    def tile_to_str(self) -> str:
+        return "G"
+
 
 class Wall(Tile):
     """
@@ -58,3 +61,6 @@ class Wall(Tile):
     def is_snake_obstruction(self) -> bool:
         """Returns if the object is a blockade for the snake or not"""
         return True
+
+    def tile_to_str(self) -> str:
+        return "W"

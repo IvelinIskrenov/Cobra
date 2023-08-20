@@ -49,3 +49,6 @@ class Tile(RenderableObject):
         tile_position_x = self.x*SQUARE_WIDTH + offset_x
         tile_position_y = self.y*SQUARE_HEIGHT + offset_y
         self.position = Vector2(tile_position_x, tile_position_y)
+
+    def tile_to_str(self) -> str:
+        pass
