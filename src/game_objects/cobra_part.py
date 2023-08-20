@@ -1,7 +1,5 @@
-from pygame import Surface, Vector2
+from pygame import Surface
 from enum import Enum
-from src.game_objects.game_tiles import Grass, Wall
-from src.base.object import Object
 from src.base.tile import Tile
 
 HORIZONTAL_SNAKE_PART_SPRITE = Surface((1, 1))
@@ -65,15 +63,15 @@ class CobraPart(Tile):
            or direction_end == direction_begin:
             return False
 
-    def set_change_directions(self,
-                              direction_begin: int = 1,
-                              direction_end: int = 2) -> bool:
+    def change_directions(self,
+                          direction_begin: int = 1,
+                          direction_end: int = 2) -> bool:
         """
         Changes the direction of the cobra part.
-        1 for left
-        2 for right
-        3 for up
-        4 for down
+        1 - left;
+        2 - right;
+        3 - up;
+        4 - down.
         """
         if not self.are_valid_directions(direction_begin, direction_end):
             return False
