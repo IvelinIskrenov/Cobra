@@ -12,7 +12,7 @@ class Object():
                  position: Vector2 = Vector2(0, 0)) -> None:
         """
         Initialises the game object.
-        Sets sposition.
+        Sets position.
         """
         self.position: Vector2 = position
 

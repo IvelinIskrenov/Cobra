@@ -28,7 +28,8 @@ class CobraPart(Tile):
     end;
     """
 
-    sprite_coordinates = {(Directions.UP, Directions.DOWN) : HORIZONTAL_SNAKE_PART_SPRITE,
+    sprite_coordinates = {(Directions.LEFT, Directions.RIGHT) : VERCTICAL_SNAKE_PART_SPRITE,
+                          (Directions.UP, Directions.DOWN) : HORIZONTAL_SNAKE_PART_SPRITE,
                           (Directions.LEFT, Directions.UP) : LEFT_TO_UP_SNAKE_PART_SPRITE,
                           (Directions.LEFT, Directions.DOWN) : LEFT_TO_DOWN_SNAKE_PART_SPRITE,
                           (Directions.UP, Directions.DOWN) : HORIZONTAL_SNAKE_PART_SPRITE,
@@ -62,6 +63,7 @@ class CobraPart(Tile):
            or direction_end <= 0\
            or direction_end == direction_begin:
             return False
+        return True
 
     def change_directions(self,
                           direction_begin: int = 1,
@@ -86,6 +88,6 @@ class CobraPart(Tile):
         assuming the directions are right.
         """
         if CobraPart.sprite_coordinates.get((self.begin, self.end)):
-            self.sprite = (self.begin, self.end)
+            self.sprite = CobraPart.sprite_coordinates.get((self.begin, self.end))
         else:
-            self.sprite = (self.end, self.begin)
+            self.sprite = CobraPart.sprite_coordinates.get((self.end, self.begin))

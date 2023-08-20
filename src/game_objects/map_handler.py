@@ -60,8 +60,7 @@ class MapHandler():
         """
         file = open(file_path, "r")
         map_lines = file.readlines()
-        while len(map_lines) > 1\
-              and map_lines[len(map_lines)-1] == "":
+        while len(map_lines) > 1 and map_lines[len(map_lines)-1] == "":
             map_lines.pop()
         file.close()
 
