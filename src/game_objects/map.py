@@ -68,14 +68,14 @@ class Map(Object):
         Returns "valid" if yes.
         if no - returns:
         "not_SCC" if the component is not strongly connected,
-        since the snake won't be able to go both ways;
-        "out_of_bounds" if the snake can get out of the map.
+        since the cobra won't be able to go both ways;
+        "out_of_bounds" if the cobra can get out of the map.
         """
         if i<0 or i>=self.rows or j<0 or j>=self.columns:
             return "out_of_bounds"
         if visited[i][j]:
             return "valid"
-        if self[i][j].is_snake_obstruction():
+        if self[i][j].is_cobra_obstruction():
             visited[i][j] = True
             return "valid"
         visited[i][j] = True
@@ -94,9 +94,9 @@ class Map(Object):
                 i_new = i + direction_x
                 j_new = j + direction_y
                 if not\
-                    (self[i_new][j_new].is_snake_obstruction()\
-                    or self[i][j_new].is_snake_obstruction()\
-                    or self[i_new][j_new].is_snake_obstruction()):
+                    (self[i_new][j_new].is_cobra_obstruction()\
+                    or self[i][j_new].is_cobra_obstruction()\
+                    or self[i_new][j_new].is_cobra_obstruction()):
                     return "valid"
         return "not_SCC"
 
@@ -106,18 +106,18 @@ class Map(Object):
         Returns "valid" if yes.
         if no - returns:
         "not_SCC" if the component is not strongly connected,
-        since the snake won't be able to go both ways;
+        since the cobra won't be able to go both ways;
         "multiple_SCC" if the SCC's are more than 1,
-        since the snake cannot travel between them;
-        "no_space" if there is no tile for the snake;
-        "out_of_bounds" if the snake can get out of the map.
+        since the cobra cannot travel between them;
+        "no_space" if there is no tile for the cobra;
+        "out_of_bounds" if the cobra can get out of the map.
         """
         SCC_count = 0
         visited = [[False]*self.columns]*self.rows
         for i in range(self.rows):
             for j in range(self.columns):
                 if not visited[i][j]\
-                and not self[i][j].is_snake_obstruction():
+                and not self[i][j].is_cobra_obstruction():
                     SCC_count += 1
                     result = self._DFS_check(i, j, visited)
                     if result != "valid":

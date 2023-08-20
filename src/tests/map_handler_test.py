@@ -1,12 +1,7 @@
 from unittest import TestCase
-from pygame import Vector2
 from os import path
 from src.game_objects.game_tiles import Grass, Wall
-from src.game_objects.map import Map
 from src.game_objects.map_handler import MapHandler, SAVE_PATH
-
-def set_map_walls(map: Map) -> None:
-    map.tiles = [[Wall()]*map.columns for i in range(map.rows)]
 
 class TestingMapHandler(TestCase):
 
@@ -25,13 +20,14 @@ class TestingMapHandler(TestCase):
         self.assertEqual(map_handler.map.check_map_valid(), "not_SCC")
 
         result = map_handler.convert_strings_to_map(["WWWW", "WGGW", "WGGW", "WWWW"])
+        self.assertTrue(result)
         self.assertEqual(map_handler.map.check_map_valid(), "valid")
 
     def test_map_handler_conversion_from_map(self):
         map_handler = MapHandler()
+
         result = map_handler.convert_strings_to_map(["WWWW", "WGGW", "WGGW", "WWWW"])
 
-        self.assertTrue(result)
         self.assertEqual(map_handler.convert_map_into_strings(), ["WWWW", "WGGW", "WGGW", "WWWW"])
 
     def test_default_map_creator(self):

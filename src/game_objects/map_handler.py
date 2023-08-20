@@ -16,7 +16,7 @@ class MapHandler():
     def __init__(self) -> None:
         """
         Initialises the map Handler.
-        Creates a default map for the snake.
+        Creates a default map for the cobra.
         """
         self.read_map("")
         self.name = "default"
@@ -49,7 +49,7 @@ class MapHandler():
                 else:
                     self.map.change_tile(i, j, Grass())
 
-        result = self.map.check_map_valid() == "valid"
+        result = (self.map.check_map_valid() == "valid")
         return result
 
     def _read_map_from_file(self, file_path: str) -> bool:
@@ -89,7 +89,7 @@ class MapHandler():
                 if not self._set_str_to_tile(i, j, el):
                     return False
 
-        if self.map.check_map_valid != "valid":
+        if self.map.check_map_valid() != "valid":
             return False
         return True
 

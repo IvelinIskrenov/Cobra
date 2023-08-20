@@ -4,8 +4,8 @@ from src.base.tile import Tile
 
 class Grass(Tile):
     """
-    Grass tile for the snake to move on. Uses the Tile interface.
-    Not a blockade for the snake.
+    Grass tile for the cobra to move on. Uses the Tile interface.
+    Not a blockade for the cobra.
 
     Parameters:
     coordinates;
@@ -26,8 +26,8 @@ class Grass(Tile):
         """
         super().__init__(coordinate_x, coordinate_y)
 
-    def is_snake_obstruction(self) -> bool:
-        """Returns if the object is a blockade for the snake or not"""
+    def is_cobra_obstruction(self) -> bool:
+        """Returns if the object is a blockade for the cobra or not"""
         return False
 
     def tile_to_str(self) -> str:
@@ -36,8 +36,8 @@ class Grass(Tile):
 
 class Wall(Tile):
     """
-    Wall tile for the snake to collide with. Uses the Tile interface.
-    A blockade for the snake.
+    Wall tile for the cobra to collide with. Uses the Tile interface.
+    A blockade for the cobra.
 
     Parameters:
     coordinates;
@@ -58,8 +58,8 @@ class Wall(Tile):
         """
         super().__init__(coordinate_x, coordinate_y)
 
-    def is_snake_obstruction(self) -> bool:
-        """Returns if the object is a blockade for the snake or not"""
+    def is_cobra_obstruction(self) -> bool:
+        """Returns if the object is a blockade for the cobra or not"""
         return True
 
     def tile_to_str(self) -> str:

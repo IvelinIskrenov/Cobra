@@ -31,8 +31,8 @@ class Tile(RenderableObject):
         self.set_coordinates(coordinate_x, coordinate_y)
         self.sprite = transform.scale(self.sprite, (SQUARE_WIDTH, SQUARE_HEIGHT))
 
-    def is_snake_obstruction(self) -> bool:
-        """Tells if the object is a blockade for the snake or not"""
+    def is_cobra_obstruction(self) -> bool:
+        """Tells if the object is a blockade for the cobra or not"""
         pass
 
     def set_coordinates(self,
