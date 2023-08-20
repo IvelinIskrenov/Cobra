@@ -1,4 +1,4 @@
-from pygame import Vector2
+from pygame import Vector2, Surface
 from src.game_objects.game_tiles import Grass, Wall
 from src.base.object import Object
 from src.base.tile import Tile
@@ -127,3 +127,12 @@ class Map(Object):
         if SCC_count > 1:
             return "multiple_SCC"
         return "valid"
+
+    def render(self, display: Surface) -> None:
+        """
+        If the object is visible renders the object on it's
+        position on the given display
+        """
+        for tile_array in self.tiles:
+            for tile in tile_array:
+                tile.render(display)

@@ -1,7 +1,9 @@
-from pygame import Vector2, Surface
+import os
+from pygame import Vector2, Surface, image
 from src.base.tile import Tile
 
-
+GRASS_SPRITE = image.load(os.path.join('src', 'sprites', 'Grass.png'))
+WALL_SPRITE = image.load(os.path.join('src', 'sprites', 'Wall.png'))
 class Grass(Tile):
     """
     Grass tile for the cobra to move on. Uses the Tile interface.
@@ -24,7 +26,7 @@ class Grass(Tile):
         default grass sprite;
         visibility.
         """
-        super().__init__(coordinate_x, coordinate_y)
+        super().__init__(coordinate_x, coordinate_y, GRASS_SPRITE)
 
     def is_cobra_obstruction(self) -> bool:
         """Returns if the object is a blockade for the cobra or not"""
@@ -56,7 +58,7 @@ class Wall(Tile):
         default wall sprite;
         visibility.
         """
-        super().__init__(coordinate_x, coordinate_y)
+        super().__init__(coordinate_x, coordinate_y, WALL_SPRITE)
 
     def is_cobra_obstruction(self) -> bool:
         """Returns if the object is a blockade for the cobra or not"""

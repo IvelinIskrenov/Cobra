@@ -37,7 +37,7 @@ class RenderableObject(Object):
         """Makes the object invisible"""
         self.invisible = False
 
-    def render(self, display: "Surface") -> None:
+    def render(self, display: Surface) -> None:
         """
         If the object is visible renders the object on it's
         position on the given display

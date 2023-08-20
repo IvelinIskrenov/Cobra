@@ -1,4 +1,5 @@
 from os import path, getcwd
+from pygame import Surface
 from src.game_objects.map import Map
 from src.game_objects.game_tiles import Grass, Wall
 
@@ -147,3 +148,7 @@ class MapHandler():
         """
         return self.map[i][j].tile_to_str()
         return "?"
+
+    def render(self, display: Surface) -> None:
+        """Renders the map on the screen"""
+        self.map.render(display)
