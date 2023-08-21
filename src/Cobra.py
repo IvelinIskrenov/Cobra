@@ -8,7 +8,7 @@ from src.game_objects.game_handler import GameHandler
 
 pygame.init()
 
-pygame_icon = pygame.image.load(os.path.join("src", "sprites", "Grass.png"))
+pygame_icon = pygame.image.load(os.path.join("src", "sprites", "cobra_head.png"))
 pygame.display.set_icon(pygame_icon)
 pygame.display.set_caption('Cobra')
 

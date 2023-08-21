@@ -48,8 +48,8 @@ class GameHandler():
                 if i == part.x and j == part.y:
                     continue
             break
-        self.apple.set_coordinates(i,
-                                   j,
+        self.apple.set_coordinates(j,
+                                   i,
                                    self.map_handler.map.position.x,
                                    self.map_handler.map.position.y)
 
@@ -246,7 +246,7 @@ class GameHandler():
         """
         Starts the game.
         """
-        self.game_state = "SnakeGame"
+        self.state = "game"
         self.clock.tick(120) # to refresh the clock rate
         while True:
             self._update()
