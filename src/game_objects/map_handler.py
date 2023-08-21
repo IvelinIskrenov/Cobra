@@ -33,7 +33,8 @@ class MapHandler():
 
         elif path.exists(file_path) and path.isfile(file_path):
             return self._read_map_from_file(file_path)
-
+        else:
+            print("AAAAAAAAAAAAAAAAA")
         return False
 
     def create_default_map(self, rows: int, columns: int) -> bool:
@@ -61,7 +62,7 @@ class MapHandler():
         """
         file = open(file_path, "r")
         map_lines = file.readlines()
-        while len(map_lines) > 1 and map_lines[len(map_lines)-1] == "":
+        while len(map_lines) > 1 and map_lines[-1] == "":
             map_lines.pop()
         file.close()
 
@@ -76,12 +77,11 @@ class MapHandler():
         if len(map_lines) == 0:
             return False
 
-        for line in map_lines:
-            if line[-1] == "\n":
-                line[:-1] #remove new line
+        for i in range(len(map_lines)):
+            if map_lines[i][-1] == "\n":
+                map_lines[i] = map_lines[i][:-1] #remove new line
 
         self.map = Map(len(map_lines), len(map_lines[0]))
-
         for i, line in enumerate(map_lines):
             if len(line) != len(map_lines[0]):
                 return False

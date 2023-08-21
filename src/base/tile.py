@@ -17,7 +17,9 @@ class Tile(RenderableObject):
     def __init__(self,
                  coordinate_x: int = 0,
                  coordinate_y: int = 0,
-                 sprite: Surface = Surface((1,1))) -> None:
+                 sprite: Surface = Surface((1,1)),
+                 width: int = SQUARE_WIDTH,
+                 height: int = SQUARE_HEIGHT) -> None:
         """
         Initialises the game tile object.
 
@@ -29,9 +31,9 @@ class Tile(RenderableObject):
         """
         super().__init__(sprite, Vector2(0, 0), True)
         self.set_coordinates(coordinate_x, coordinate_y)
-        self.sprite = transform.scale(self.sprite, (SQUARE_WIDTH, SQUARE_HEIGHT))
-        self.width = SQUARE_WIDTH
-        self.height = SQUARE_HEIGHT
+        self.sprite = transform.scale(self.sprite, (width, height))
+        self.width = width
+        self.height = height
 
     def is_cobra_obstruction(self) -> bool:
         """Tells if the object is a blockade for the cobra or not"""
