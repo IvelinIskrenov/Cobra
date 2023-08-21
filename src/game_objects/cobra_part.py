@@ -1,20 +1,20 @@
-import os
+from os import path
 from pygame import Surface, image, transform, Vector2
 from enum import Enum
 from src.base.tile import Tile
 
 HORIZONTAL_SNAKE_PART_SPRITE =\
-    image.load(os.path.join('src', 'sprites', 'half_cobra_straight_part.png'))
+    image.load(path.join('src', 'sprites', 'half_cobra_straight_part.png'))
 VERCTICAL_SNAKE_PART_SPRITE = transform.rotate(
-    image.load(os.path.join('src', 'sprites', 'half_cobra_straight_part.png')), -90)
+    image.load(path.join('src', 'sprites', 'half_cobra_straight_part.png')), -90)
 LEFT_TO_UP_SNAKE_PART_SPRITE =\
-    image.load(os.path.join('src', 'sprites', 'left_to_up_cobra_part.png'))
+    image.load(path.join('src', 'sprites', 'left_to_up_cobra_part.png'))
 LEFT_TO_DOWN_SNAKE_PART_SPRITE = transform.rotate(
-    image.load(os.path.join('src', 'sprites', 'left_to_up_cobra_part.png'), 90))
+    image.load(path.join('src', 'sprites', 'left_to_up_cobra_part.png'), 90))
 RIGHT_TO_UP_SNAKE_PART_SPRITE = transform.rotate(
-    image.load(os.path.join('src', 'sprites', 'left_to_up_cobra_part.png'), -90))
+    image.load(path.join('src', 'sprites', 'left_to_up_cobra_part.png'), -90))
 RIGHT_TO_DOWN_SNAKE_PART_SPRITE = transform.rotate(
-    image.load(os.path.join('src', 'sprites', 'left_to_up_cobra_part.png'), 180))
+    image.load(path.join('src', 'sprites', 'left_to_up_cobra_part.png'), 180))
 
 class Direction(Enum):
     LEFT = 1
