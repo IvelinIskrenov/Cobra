@@ -1,15 +1,22 @@
-from pygame import Surface
+import os
+from pygame import Surface, image, transform, Vector2
 from enum import Enum
 from src.base.tile import Tile
 
-HORIZONTAL_SNAKE_PART_SPRITE = Surface((1, 1))
-VERCTICAL_SNAKE_PART_SPRITE = Surface((1, 1))
-LEFT_TO_UP_SNAKE_PART_SPRITE = Surface((1, 1))
-LEFT_TO_DOWN_SNAKE_PART_SPRITE = Surface((1, 1))
-RIGHT_TO_UP_SNAKE_PART_SPRITE = Surface((1, 1))
-RIGHT_TO_DOWN_SNAKE_PART_SPRITE = Surface((1, 1))
+HORIZONTAL_SNAKE_PART_SPRITE =\
+    image.load(os.path.join('src', 'sprites', 'half_cobra_straight_part.png'))
+VERCTICAL_SNAKE_PART_SPRITE = transform.rotate(
+    image.load(os.path.join('src', 'sprites', 'half_cobra_straight_part.png')), -90)
+LEFT_TO_UP_SNAKE_PART_SPRITE =\
+    image.load(os.path.join('src', 'sprites', 'left_to_up_cobra_part.png'))
+LEFT_TO_DOWN_SNAKE_PART_SPRITE = transform.rotate(
+    image.load(os.path.join('src', 'sprites', 'left_to_up_cobra_part.png'), 90))
+RIGHT_TO_UP_SNAKE_PART_SPRITE = transform.rotate(
+    image.load(os.path.join('src', 'sprites', 'left_to_up_cobra_part.png'), -90))
+RIGHT_TO_DOWN_SNAKE_PART_SPRITE = transform.rotate(
+    image.load(os.path.join('src', 'sprites', 'left_to_up_cobra_part.png'), 180))
 
-class Directions(Enum):
+class Direction(Enum):
     LEFT = 1
     RIGHT = 2
     UP = 3
@@ -28,13 +35,13 @@ class CobraPart(Tile):
     end;
     """
 
-    sprite_coordinates = {(Directions.LEFT, Directions.RIGHT) : VERCTICAL_SNAKE_PART_SPRITE,
-                          (Directions.UP, Directions.DOWN) : HORIZONTAL_SNAKE_PART_SPRITE,
-                          (Directions.LEFT, Directions.UP) : LEFT_TO_UP_SNAKE_PART_SPRITE,
-                          (Directions.LEFT, Directions.DOWN) : LEFT_TO_DOWN_SNAKE_PART_SPRITE,
-                          (Directions.UP, Directions.DOWN) : HORIZONTAL_SNAKE_PART_SPRITE,
-                          (Directions.RIGHT, Directions.UP) : RIGHT_TO_UP_SNAKE_PART_SPRITE,
-                          (Directions.RIGHT, Directions.DOWN) : RIGHT_TO_DOWN_SNAKE_PART_SPRITE}
+    sprite_coordinates = {(Direction.LEFT, Direction.RIGHT) : VERCTICAL_SNAKE_PART_SPRITE,
+                          (Direction.UP, Direction.DOWN) : HORIZONTAL_SNAKE_PART_SPRITE,
+                          (Direction.LEFT, Direction.UP) : LEFT_TO_UP_SNAKE_PART_SPRITE,
+                          (Direction.LEFT, Direction.DOWN) : LEFT_TO_DOWN_SNAKE_PART_SPRITE,
+                          (Direction.UP, Direction.DOWN) : HORIZONTAL_SNAKE_PART_SPRITE,
+                          (Direction.RIGHT, Direction.UP) : RIGHT_TO_UP_SNAKE_PART_SPRITE,
+                          (Direction.RIGHT, Direction.DOWN) : RIGHT_TO_DOWN_SNAKE_PART_SPRITE}
 
 
     def __init__(self,
@@ -49,8 +56,8 @@ class CobraPart(Tile):
         end of the cobra part;
         """
         super().__init__(coordinate_x, coordinate_y)
-        self.begin: Directions = Directions.LEFT
-        self.end: Directions = Directions.RIGHT
+        self.begin: Direction = Direction.LEFT
+        self.end: Direction = Direction.RIGHT
         self._set_sprite
 
     def are_valid_directions(self,
@@ -77,8 +84,8 @@ class CobraPart(Tile):
         """
         if not self.are_valid_directions(direction_begin, direction_end):
             return False
-        self.begin = Directions(direction_begin)
-        self.end = Directions(direction_end)
+        self.begin = Direction(direction_begin)
+        self.end = Direction(direction_end)
         self._set_sprite()
         return True
 
@@ -91,3 +98,46 @@ class CobraPart(Tile):
             self.sprite = CobraPart.sprite_coordinates.get((self.begin, self.end))
         else:
             self.sprite = CobraPart.sprite_coordinates.get((self.end, self.begin))
+
+    def _is_horizontal_piece(self):
+        """Checks whether the cobra piece is currently horizontal."""
+        return self.begin in [Direction.LEFT, Direction.RIGHT]\
+                and self.end in [Direction.LEFT, Direction.RIGHT]
+
+    def _is_vertical_piece(self):
+        """Checks whether the cobra piece is currently horizontal."""
+        return self.begin in [Direction.UP, Direction.DOWN]\
+                and self.end in [Direction.UP, Direction.DOWN]
+
+    def _render_horizontal_piece(self, display: Surface):
+        """
+        Renders the entire horizontal cobra piece.
+        """
+        display.blit(self.sprite, self.position)
+        half_piece_pos = self.position
+        half_piece_pos.x += self.width/2
+        display.blit(self.sprite, half_piece_pos)
+
+    def _render_vertical_piece(self, display: Surface):
+        """
+        Renders the entire horizontal cobra piece.
+        """
+        display.blit(self.sprite, self.position)
+        half_piece_pos = self.position
+        half_piece_pos.y += self.height/2
+        display.blit(self.sprite, half_piece_pos)
+
+    def render_entire_part(self, display: Surface) -> None:
+        """
+        if visible, renders the entire cobra part, not only half of it.
+        """
+        if self.visible:
+            if self._is_horizontal_piece():
+                self._render_horizontal_piece(display)
+            elif self._is_vertical_piece():
+                self._render_vertical_piece(display)
+            else:
+                # this is in the case which the this is piece which is
+                # responsible for turning the cobra
+                self.render()
+

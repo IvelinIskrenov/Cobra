@@ -1,5 +1,5 @@
 from pygame import Surface
-from src.game_objects.cobra_part import CobraPart, Directions
+from src.game_objects.cobra_part import CobraPart, Direction
 from src.base.tile import Tile
 
 class CobraHead(CobraPart):
@@ -37,7 +37,7 @@ class Cobra():
         active;
         """
         self.parts: list[CobraPart] = []
-        self.facing: Directions = Directions.RIGHT
+        self.facing: Direction = Direction.RIGHT
         self.offset_x: int = offset_x
         self.offset_y: int = offset_y
         self.eaten = False
@@ -55,13 +55,13 @@ class Cobra():
         if not self.active:
             return
         old_part = self.parts[0]
-        if self.facing == Directions.RIGHT:
+        if self.facing == Direction.RIGHT:
             self.parts[0].set_coordinates(old_part.x + 1, old_part.y, self.offset_x, self.offset_y)
-        if self.facing == Directions.LEFT:
+        if self.facing == Direction.LEFT:
             self.parts[0].set_coordinates(old_part.x - 1, old_part.y, self.offset_x, self.offset_y)
-        if self.facing == Directions.UP:
+        if self.facing == Direction.UP:
             self.parts[0].set_coordinates(old_part.x, old_part.y - 1, self.offset_x, self.offset_y)
-        if self.facing == Directions.DOWN:
+        if self.facing == Direction.DOWN:
             self.parts[0].set_coordinates(old_part.x, old_part.y + 1, self.offset_x, self.offset_y)
         for part in self.parts:
             old_part_buffer = part
@@ -77,6 +77,11 @@ class Cobra():
     def get_head_position(self) -> tuple[int, int]:
         """Returns the head's position relative to the tiles."""
         return (self.parts[0].x, self.parts[0].y)
+
+    def render(self, display: Surface) -> None:
+        """Renders the entire snake on the given display"""
+        for cobra_part in self.parts[1:-1]:
+            cobra_part.render_entire_part(self, display)
 
     def deactivate(self):
         """Deactivates the snake so it can't move."""
