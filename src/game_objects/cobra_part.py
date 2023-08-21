@@ -39,7 +39,6 @@ class CobraPart(Tile):
                           (Direction.UP, Direction.DOWN) : VERCTICAL_SNAKE_PART_SPRITE,
                           (Direction.LEFT, Direction.UP) : LEFT_TO_UP_SNAKE_PART_SPRITE,
                           (Direction.LEFT, Direction.DOWN) : LEFT_TO_DOWN_SNAKE_PART_SPRITE,
-                          (Direction.UP, Direction.DOWN) : HORIZONTAL_SNAKE_PART_SPRITE,
                           (Direction.RIGHT, Direction.UP) : RIGHT_TO_UP_SNAKE_PART_SPRITE,
                           (Direction.RIGHT, Direction.DOWN) : RIGHT_TO_DOWN_SNAKE_PART_SPRITE}
 
@@ -166,5 +165,5 @@ class CobraPart(Tile):
             else:
                 # this is in the case which the this is piece which is
                 # responsible for turning the cobra
-                super().render()
+                super().render(display)
 

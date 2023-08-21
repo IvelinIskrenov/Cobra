@@ -38,7 +38,7 @@ class CobraHead(CobraPart):
             self.sprite = transform.rotate(COBRA_HEAD_SPRITE, 180)
         elif self.end == Direction.UP:
             self.sprite = transform.rotate(COBRA_HEAD_SPRITE, 90)
-        elif self.end == Direction.RIGHT:
+        elif self.end == Direction.DOWN:
             self.sprite = transform.rotate(COBRA_HEAD_SPRITE, -90)
 
 
@@ -90,9 +90,9 @@ class Cobra():
         if self.next_direction == Direction.LEFT:
             return (self.head.x - 1, self.head.y)
         if self.next_direction == Direction.UP:
-            return (self.head.x, self.head.y + 1)
-        if self.next_direction == Direction.DOWN:
             return (self.head.x, self.head.y - 1)
+        if self.next_direction == Direction.DOWN:
+            return (self.head.x, self.head.y + 1)
 
     def next_step(self) -> None:
         """
@@ -104,18 +104,26 @@ class Cobra():
         old_coordinates = (self.head.x, self.head.y)
         old_directions = (self.head.begin, self.next_direction)
         next_coordinates = self.get_next_head_coordinates()
-        self.head.set_coordinates(next_coordinates[0], next_coordinates[1], self.offset_x, self.offset_y)
+        self.head.set_coordinates(next_coordinates[0],
+                                  next_coordinates[1],
+                                    self.offset_x,
+                                    self.offset_y)
 
-        self.head.begin = self.head.get_opposite_direction(self.next_direction)
-        self.head.end = self.next_direction
+        self.head.change_directions(self.head.get_opposite_direction(self.next_direction),
+                                    self.next_direction)
+        self.facing = self.next_direction
 
         for part in self.parts:
             old_coordinates_buffer = (part.x, part.y)
             old_directions_buffer = (part.begin, part.end)
-            part.set_coordinates(old_coordinates[0], old_coordinates[1], self.offset_x, self.offset_y)
+            part.set_coordinates(old_coordinates[0],
+                                 old_coordinates[1],
+                                 self.offset_x,
+                                 self.offset_y)
             part.change_directions(old_directions[0], old_directions[1])
             old_coordinates = old_coordinates_buffer
             old_directions = old_directions_buffer
+
         if self.eaten:
             self.eaten = False
             self.parts.append(CobraPart())
@@ -143,12 +151,14 @@ class Cobra():
         Returns false if not changed, true otherwise.
         """
         if not self.head.is_valid_direction(input):
+            print(input)
             return False
         needed_direction = Direction(input)
         if self.head.get_opposite_direction(self.facing)\
             == needed_direction:
             return False
         self._change_next_direction(needed_direction)
+        return True
 
 
     def _change_next_direction(self, direction: Direction) -> None:
