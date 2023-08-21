@@ -1,7 +1,6 @@
 from os import path
 from pygame import Surface, image, transform
 from src.game_objects.cobra_part import CobraPart, Direction
-from src.base.tile import Tile
 
 COBRA_HEAD_SPRITE = \
     image.load(path.join('src', 'sprites', 'cobra_head.png'))
@@ -43,8 +42,9 @@ class CobraHead(CobraPart):
             self.sprite = transform.rotate(COBRA_HEAD_SPRITE, -90)
 
 
-    def render_head(display):
+    def render_head(self, display: Surface):
         """Renders the head of the cobra"""
+        super().render(display)
 
 class Cobra():
     """
@@ -72,16 +72,27 @@ class Cobra():
         eaten;
         active;
         """
-        self.parts: list[CobraPart] = []
+        self.head = CobraHead()
+        self.parts: list[CobraPart] = [CobraPart()]
         self.facing: Direction = Direction.RIGHT
+        self.next_direction: Direction = Direction.RIGHT
         self.offset_x: int = offset_x
         self.offset_y: int = offset_y
         self.eaten = False
         self.active = True
-        self.parts.append(CobraHead())
-        self.parts.append(CobraPart())
-        self.parts[0].set_coordinates(start_coordinate_x, start_coordinate_y, offset_x, offset_y)
-        self.parts[1].set_coordinates(start_coordinate_x - 1, start_coordinate_y, offset_x, offset_y)
+        self.head.set_coordinates(start_coordinate_x, start_coordinate_y, offset_x, offset_y)
+        self.parts[0].set_coordinates(start_coordinate_x - 1, start_coordinate_y, offset_x, offset_y)
+
+    def get_next_head_coordinates(self) -> tuple[int, int]:
+        """Returns where the head would move next depending on the next direction"""
+        if self.next_direction == Direction.RIGHT:
+            return (self.head.x + 1, self.head.y)
+        if self.next_direction == Direction.LEFT:
+            return (self.head.x - 1, self.head.y)
+        if self.next_direction == Direction.UP:
+            return (self.head.x, self.head.y + 1)
+        if self.next_direction == Direction.DOWN:
+            return (self.head.x, self.head.y - 1)
 
     def next_step(self) -> None:
         """
@@ -90,36 +101,59 @@ class Cobra():
         """
         if not self.active:
             return
-        old_part = self.parts[0]
-        if self.facing == Direction.RIGHT:
-            self.parts[0].set_coordinates(old_part.x + 1, old_part.y, self.offset_x, self.offset_y)
-        if self.facing == Direction.LEFT:
-            self.parts[0].set_coordinates(old_part.x - 1, old_part.y, self.offset_x, self.offset_y)
-        if self.facing == Direction.UP:
-            self.parts[0].set_coordinates(old_part.x, old_part.y - 1, self.offset_x, self.offset_y)
-        if self.facing == Direction.DOWN:
-            self.parts[0].set_coordinates(old_part.x, old_part.y + 1, self.offset_x, self.offset_y)
+        old_coordinates = (self.head.x, self.head.y)
+        old_directions = (self.head.begin, self.next_direction)
+        next_coordinates = self.get_next_head_coordinates()
+        self.head.set_coordinates(next_coordinates[0], next_coordinates[1], self.offset_x, self.offset_y)
+
+        self.head.begin = self.head.get_opposite_direction(self.next_direction)
+        self.head.end = self.next_direction
+
         for part in self.parts:
-            old_part_buffer = part
-            part.set_coordinates(old_part.x, old_part.y, self.offset_x, self.offset_y)
-            part.change_directions(old_part.begin, old_part.end)
-            old_part = old_part_buffer
+            old_coordinates_buffer = (part.x, part.y)
+            old_directions_buffer = (part.begin, part.end)
+            part.set_coordinates(old_coordinates[0], old_coordinates[1], self.offset_x, self.offset_y)
+            part.change_directions(old_directions[0], old_directions[1])
+            old_coordinates = old_coordinates_buffer
+            old_directions = old_directions_buffer
         if self.eaten:
             self.eaten = False
             self.parts.append(CobraPart())
-            self.parts[-1].change_directions(old_part.begin, old_part.end)
-            self.parts[-1].set_coordinates(old_part.x, old_part.y, self.offset_x, self.offset_y)
+            self.parts[-1].change_directions(old_directions[0], old_directions[1])
+            self.parts[-1].set_coordinates(old_coordinates[0], old_coordinates[1], self.offset_x, self.offset_y)
 
     def get_head_position(self) -> tuple[int, int]:
         """Returns the head's position relative to the tiles."""
-        return (self.parts[0].x, self.parts[0].y)
+        return (self.head.x, self.head.y)
 
     def render(self, display: Surface) -> None:
         """Renders the entire cobra on the given display"""
-        for cobra_part in self.parts[1:-1]:
+        for cobra_part in self.parts:
             cobra_part.render_entire_part(display)
         # the head of the cobra has other method of rendering.
-        self.parts[0].render_head(display)
+        self.head.render_head(display)
+
+    def switch_direction_to_input(self, input: int) -> bool:
+        """
+        Changes the direction of the cobra in the next move.
+        1 - left;
+        2 - right;
+        3 - up;
+        4 - down.
+        Returns false if not changed, true otherwise.
+        """
+        if not self.head.is_valid_direction(input):
+            return False
+        needed_direction = Direction(input)
+        if self.head.get_opposite_direction(self.facing)\
+            == needed_direction:
+            return False
+        self._change_next_direction(needed_direction)
+
+
+    def _change_next_direction(self, direction: Direction) -> None:
+        """Changes the next direction of the cobra so it can rotate on the next step."""
+        self.next_direction = direction
 
     def deactivate(self):
         """Deactivates the cobra so it can't move."""

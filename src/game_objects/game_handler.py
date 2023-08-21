@@ -5,6 +5,7 @@ from pygame.locals import *
 from random import randint
 from os import path, getcwd
 from src.game_objects.map_handler import MapHandler
+from src.game_objects.cobra import Cobra
 from src.game_objects.game_tiles import Grass, Wall
 
 SAVE_PATH = path.join(getcwd(), "src", "maps")
@@ -21,12 +22,14 @@ class GameHandler():
         self.clock = pygame.time.Clock()
         self.map_handler = MapHandler()
         self.map_handler.create_default_map(8, 8)
+        self.cobra = Cobra()
         self._create_new_apple()
         self.screen = pygame.display.set_mode((1400, 700), pygame.RESIZABLE)
         self.keys_pressed =\
             {
             "player_movement": [False, False, False, False],
             }
+        self.next_step_time = 2000 # ms
 
     def _create_new_apple(self):
         """Creates new apple on the map on a random spot"""
@@ -74,17 +77,26 @@ class GameHandler():
         """
         Evaluates events based on pressed keys from user.
         """
-        
+        pass
 
 
     def render(self) -> None:
         """Renders all the needed objects to the screen"""
         self.screen.fill((0,0,0))
         self.map_handler.render(self.screen)
+        self.cobra.render(self.screen)
+
+    def handle_movement(self) -> None:
+        time = self.clock.get_time()
+        self.next_step_time -= time
+        if self.next_step_time <= 0:
+            self.next_step_time = 1000
+            self.cobra.next_step()
 
     def _update(self):
         """Updates the game windows to the next frame"""
         self.get_key_presses()
+        self.handle_movement()
         self.render()
         pygame.display.flip()
 
@@ -93,6 +105,7 @@ class GameHandler():
         Starts the game.
         """
         self.game_state = "SnakeGame"
+        self.clock.tick(120) # to refresh the clock rate
         while True:
             self._update()
             await asyncio.sleep(0)

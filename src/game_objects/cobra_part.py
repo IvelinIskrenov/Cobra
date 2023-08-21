@@ -10,11 +10,11 @@ VERCTICAL_SNAKE_PART_SPRITE = transform.rotate(
 LEFT_TO_UP_SNAKE_PART_SPRITE =\
     image.load(path.join('src', 'sprites', 'left_to_up_cobra_part.png'))
 LEFT_TO_DOWN_SNAKE_PART_SPRITE = transform.rotate(
-    image.load(path.join('src', 'sprites', 'left_to_up_cobra_part.png'), 90))
+    image.load(path.join('src', 'sprites', 'left_to_up_cobra_part.png')), 90)
 RIGHT_TO_UP_SNAKE_PART_SPRITE = transform.rotate(
-    image.load(path.join('src', 'sprites', 'left_to_up_cobra_part.png'), -90))
+    image.load(path.join('src', 'sprites', 'left_to_up_cobra_part.png')), -90)
 RIGHT_TO_DOWN_SNAKE_PART_SPRITE = transform.rotate(
-    image.load(path.join('src', 'sprites', 'left_to_up_cobra_part.png'), 180))
+    image.load(path.join('src', 'sprites', 'left_to_up_cobra_part.png')), 180)
 
 class Direction(Enum):
     LEFT = 1
@@ -35,8 +35,8 @@ class CobraPart(Tile):
     end;
     """
 
-    sprite_coordinates = {(Direction.LEFT, Direction.RIGHT) : VERCTICAL_SNAKE_PART_SPRITE,
-                          (Direction.UP, Direction.DOWN) : HORIZONTAL_SNAKE_PART_SPRITE,
+    sprite_coordinates = {(Direction.LEFT, Direction.RIGHT) : HORIZONTAL_SNAKE_PART_SPRITE,
+                          (Direction.UP, Direction.DOWN) : VERCTICAL_SNAKE_PART_SPRITE,
                           (Direction.LEFT, Direction.UP) : LEFT_TO_UP_SNAKE_PART_SPRITE,
                           (Direction.LEFT, Direction.DOWN) : LEFT_TO_DOWN_SNAKE_PART_SPRITE,
                           (Direction.UP, Direction.DOWN) : HORIZONTAL_SNAKE_PART_SPRITE,
@@ -58,17 +58,39 @@ class CobraPart(Tile):
         super().__init__(coordinate_x, coordinate_y)
         self.begin: Direction = Direction.LEFT
         self.end: Direction = Direction.RIGHT
-        self._set_sprite
+        self._set_sprite()
+
+    def get_opposite_direction(self,  direction: Direction) -> Direction:
+        if direction == Direction.LEFT:
+            return Direction.RIGHT
+        if direction == Direction.RIGHT:
+            return Direction.LEFT
+        if direction == Direction.UP:
+            return Direction.DOWN
+        return Direction.UP
+
+    def is_valid_direction(self, direction: int = 1) -> bool:
+        """
+        Checks if the direction is valid and returns the result
+        Works with both int and direction.
+        """
+        if isinstance(direction, Direction):
+            direction = direction.value
+        if direction > 4 or direction <= 0:
+            return False
+        return True
+
 
     def are_valid_directions(self,
                                direction_begin: int = 1,
                                direction_end: int = 2) -> bool:
-        """Checks if the directions are valid and returns the result"""
-        if direction_begin > 4\
-           or direction_end > 4\
-           or direction_begin <= 0\
-           or direction_end <= 0\
-           or direction_end == direction_begin:
+        """
+        Checks if the directions are valid and returns the result
+        Works with both int and direction.
+        """
+        if not self.is_valid_direction(direction_begin)\
+            or not self.is_valid_direction(direction_end)\
+            or direction_end == direction_begin:
             return False
         return True
 
@@ -77,11 +99,16 @@ class CobraPart(Tile):
                           direction_end: int = 2) -> bool:
         """
         Changes the direction of the cobra part.
+        Works with both int and direction.
         1 - left;
         2 - right;
         3 - up;
         4 - down.
         """
+        if isinstance(direction_begin, Direction):
+            direction_begin = direction_begin.value
+        if isinstance(direction_end, Direction):
+            direction_end = direction_end.value
         if not self.are_valid_directions(direction_begin, direction_end):
             return False
         self.begin = Direction(direction_begin)
@@ -114,7 +141,7 @@ class CobraPart(Tile):
         Renders the entire horizontal cobra piece.
         """
         display.blit(self.sprite, self.position)
-        half_piece_pos = self.position
+        half_piece_pos = Vector2(self.position)
         half_piece_pos.x += self.width/2
         display.blit(self.sprite, half_piece_pos)
 
@@ -123,7 +150,7 @@ class CobraPart(Tile):
         Renders the entire horizontal cobra piece.
         """
         display.blit(self.sprite, self.position)
-        half_piece_pos = self.position
+        half_piece_pos = Vector2(self.position)
         half_piece_pos.y += self.height/2
         display.blit(self.sprite, half_piece_pos)
 
@@ -139,5 +166,5 @@ class CobraPart(Tile):
             else:
                 # this is in the case which the this is piece which is
                 # responsible for turning the cobra
-                self.render()
+                super().render()
 
